@@ -7,6 +7,9 @@ def check_safety(check_report: list, remove_index=None):
     # are broken, it will call itself twice more, to see if the report is safe if n or n+1 is
     # removed.
     if remove_index is not None:
+        if remove_index < 0:
+            # Make sure we're checking a valid index
+            return False
         # If remove_index is not None, then we are doing a safety check with a number removed
         # So remove that number from the list
         temp_list = [x for x in check_report]
@@ -33,8 +36,9 @@ def check_safety(check_report: list, remove_index=None):
         if not safe:
             if remove_index is None:
                 # Since we haven't removed anything yet, check the safety of the report
-                # with n or n+1 removed. If one of them is safe, then the report is safe
-                return check_safety(check_report, n) or check_safety(check_report, n+1)
+                # with n, n+1, and n-1 removed. If one of them is safe, then the report is safe
+                return (check_safety(check_report, n) or check_safety(check_report, n+1)
+                        or check_safety(check_report, n-1))
             else:
                 # remove_index is not None, so we've failed safety checks AND this is already
                 # checking a list with a removed index. so it is definitely not safe and we can

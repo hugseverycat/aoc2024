@@ -4,8 +4,8 @@ with open('input/02.txt') as f:
 
 def check_safety(check_report: list, remove_index=None):
     # This function is recursive. If the function compares two numbers and the safety rules
-    # are broken, it will call itself twice more, to see if the report is safe if n or n+1 is
-    # removed.
+    # are broken, it will call itself thrice more, to see if the report is safe if n, n+1
+    # or n-1 is removed.
     if remove_index is not None:
         if remove_index < 0:
             # Make sure we're checking a valid index

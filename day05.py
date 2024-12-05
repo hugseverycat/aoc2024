@@ -23,11 +23,10 @@ for line in lines:
 
 middle_sum_p1 = 0
 middle_sum_p2 = 0
-# Observation of data: If we have an update, say [a, b, c], and we count how many members of the update
-# exist in a particular member's pair dictionary, the count will be unique for each member. For example,
-# if [a, b, c] is in order, pairs[a] will contain 2 of [b, c]; pairs[b] will contain 1 of [a, c], and
-# pairs[c] will contain 0 of [a, b]. I don't know if this HAS to be the case but it is true for my input.
-# Therefore, we can tell if an update is in order if the count is in reverse order.
+# Observation of data: If a page is supposed to be before another page, it will ALWAYS have a rule for it. None of the
+# rules are "indirect". So for example, if [a, b, c] is in order, then there is a rule a|b and a|c, and a rule b|c.
+# This means you can count how many rules there are relating to the other pages in the update. So the count here would
+# be [2, 1, 0]. If the update is in order, the number of rules will be in decreasing order.
 for this_update in updates:
     before_list = []
     for page in this_update:

@@ -8,7 +8,7 @@ updates = []
 next_section = False
 # Going to import the before|after rules as a dictionary. The key is the "before" number
 # and the value will be a list of all numbers that must go "after" that number. For example,
-# 1|2 and 1|3 will result in a dictionary entry a: [2, 3]
+# 1|2 and 1|3 will result in a dictionary entry 1: [2, 3]
 
 # After detecting a blank line, we'll collect each line of updates and store them as lists in
 # the updates list.

@@ -51,25 +51,23 @@ for potential_obs in visited:
     curr_x, curr_y = start_x, start_y
     direction_index = 0
 
-    # A new set of visited locations and directions for this theoretical
-    # If we ever revisit a location going in the same direction we were before, we know we have a loop
+    # A set to keep track of where we turn, and what direction we're coming from
+    # If we hit this turn coming from the same direction, we've found a loop
     temp_visited = set()
 
     # Now we will travel the path with this new obstacle
     while curr_x in range(0, x_bound) and curr_y in range(0, y_bound):
         # Get our current direction
         dx, dy = direction_set[direction_index]
-        # Check if we've been here before while going the same direction
-        if (curr_x, curr_y, dx, dy) in temp_visited:
-            # If we have, the obstruction we are testing creates a loop, no need to go further
-            obstructions += 1
-            break
 
-        # If not, add it to the temporary visited set
-        temp_visited.add((curr_x, curr_y, dx, dy))
-
-        # Move or turn like we did in part 1
+        # Try to move or turn like we did in part 1
         if (curr_x + dx, curr_y + dy) in temp_obstructions:
+            # We found a turn, let's check to see if we've made this same turn before
+            if (curr_x, curr_y, dx, dy) in temp_visited:
+                obstructions += 1
+                break
+            # This is a new turn, add it to the list and make the turn
+            temp_visited.add((curr_x, curr_y, dx, dy))
             direction_index = (direction_index + 1) % 4
         else:
             curr_x += dx

@@ -1,7 +1,7 @@
 with open('input/06.txt') as f:
     lines = [line.rstrip() for line in f]
 
-obstacles = set()  # (x, y) coordinates of each obstacle
+obs_set = set()  # (x, y) coordinates of each obstruction
 visited = set()  # (x, y) coordinates of each location visited for part 1
 x_bound = 0
 y_bound = 0
@@ -15,7 +15,7 @@ for y, line in enumerate(lines):
         x_bound = len(line)
     for x, this_char in enumerate(line):
         if this_char == '#':
-            obstacles.add((x, y))
+            obs_set.add((x, y))
         elif this_char == '^':
             start_x, start_y = x, y
     y_bound += 1
@@ -30,8 +30,8 @@ while curr_x in range(0, x_bound) and curr_y in range(0, y_bound):
     # Add the current position to visited set (for part 1)
     visited.add((curr_x, curr_y))
 
-    # If we find an obstacle, turn
-    if (curr_x + dx, curr_y + dy) in obstacles:
+    # If we find an obstruction, turn
+    if (curr_x + dx, curr_y + dy) in obs_set:
         direction_index = (direction_index + 1) % 4
     else:
         # Otherwise, continue in the same direction
@@ -39,13 +39,10 @@ while curr_x in range(0, x_bound) and curr_y in range(0, y_bound):
         curr_y += dy
 print(f"Part 1: {len(visited)}")
 
-# Now lets check what happens if we place an obstacle on every location we've visited
+# Now lets check what happens if we place an obstruction on every location we've visited
 for potential_obs in visited:
-    # Pull the x, y of this potential obstacle
-    ox, oy = potential_obs
-
-    # Create a temporary obstacle set with the original obstacles + this potential one
-    temp_obstructions = obstacles.union({(ox, oy)})
+    # Create a temporary obstruction set with the original obstructions + this potential one
+    temp_obstructions = obs_set.union({potential_obs})
 
     # Reset our starting location and direction
     curr_x, curr_y = start_x, start_y
@@ -55,7 +52,7 @@ for potential_obs in visited:
     # If we hit this turn coming from the same direction, we've found a loop
     temp_visited = set()
 
-    # Now we will travel the path with this new obstacle
+    # Now we will travel the path with this new obstruction
     while curr_x in range(0, x_bound) and curr_y in range(0, y_bound):
         # Get our current direction
         dx, dy = direction_set[direction_index]
@@ -74,4 +71,3 @@ for potential_obs in visited:
             curr_y += dy
 
 print(f"Part 2: {obstructions}")
-

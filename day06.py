@@ -61,6 +61,7 @@ for potential_obs in visited:
         if (curr_x + dx, curr_y + dy) in temp_obstructions:
             # We found a turn, let's check to see if we've made this same turn before
             if (curr_x, curr_y, dx, dy) in temp_visited:
+                # We've made this exact turn before so we've found a loop. Stop checking.
                 obstructions += 1
                 break
             # This is a new turn, add it to the list and make the turn

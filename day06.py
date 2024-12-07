@@ -64,7 +64,7 @@ for potential_obs in visited:
                 # We've made this exact turn before so we've found a loop. Stop checking.
                 obstructions += 1
                 break
-            # This is a new turn, add it to the list and make the turn
+            # This is a new turn, add it to the set and make the turn
             temp_visited.add((curr_x, curr_y, dx, dy))
             direction_index = (direction_index + 1) % 4
         else:

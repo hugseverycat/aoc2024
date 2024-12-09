@@ -105,6 +105,7 @@ else:  # Part 2
             if free_space[free_index] == files[f_id][1]:
                 files[f_id][0] = free_index
                 del free_space[free_index]
+                free_index_sorted = sorted(free_space.keys())
                 break
             # If we find a free space that fits our file with room to spare, update the file's index
             # Add a new free space at index=old index + file length and length= old length - file length
@@ -113,9 +114,8 @@ else:  # Part 2
                 files[f_id][0] = free_index
                 free_space[free_index + files[f_id][1]] = free_space[free_index] - files[f_id][1]
                 del free_space[free_index]
+                free_index_sorted = sorted(free_space.keys())
                 break
-
-        free_index_sorted = sorted(free_space.keys())
 
     check_sum = 0
     for this_file in files:

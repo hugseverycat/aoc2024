@@ -1,13 +1,13 @@
 with open('input/11.txt') as f:
     stones = [int(x) for x in [line.rstrip() for line in f][0].split()]
 
-iterations = 75
+blinks = 75
 stone_states = dict()
 
 
 def stone_transform(stone: int, i_count: int, st_states: dict) -> int:
     """
-    A recursive function to transform stones. If the function reaches the final transformation, it returns 1. If it
+    A recursive function to transform stones. If the function reaches the final blink, it returns 1. If it
     detects a state we've already seen in the st_states dict then it returns that count. Otherwise, it calls itself on
     the transformed stone or stones.
     :param stone: The number engraved on the current stone
@@ -18,7 +18,7 @@ def stone_transform(stone: int, i_count: int, st_states: dict) -> int:
     stone_count = 1
 
     # If we've reached the end, I am one stone. Return 1
-    if i_count == iterations:
+    if i_count == blinks:
         st_states[stone, i_count] = stone_count
         return 1
     # If we've seen this state before, return the saved count instead
@@ -48,4 +48,4 @@ total_count = 0
 for this_stone in stones:
     total_count += stone_transform(this_stone, 0, stone_states)
 
-print(f"After {iterations} transformations: {total_count}")
+print(f"After {blinks} blinks: {total_count}")

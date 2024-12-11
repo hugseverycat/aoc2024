@@ -7,8 +7,8 @@ stone_states = dict()
 
 def stone_transform(stone: int, i_count: int, st_states: dict) -> int:
     """
-    A recursive function to transform stones. If the function reaches the ith transformation, it returns 1. If it
-    detects a state we've already seen (stone, i_count) then it returns that count. Otherwise, it calls itself on
+    A recursive function to transform stones. If the function reaches the final transformation, it returns 1. If it
+    detects a state we've already seen in the st_states dict then it returns that count. Otherwise, it calls itself on
     the transformed stone or stones.
     :param stone: The number engraved on the current stone
     :param i_count: The count of times this stone has already transformed
@@ -16,11 +16,12 @@ def stone_transform(stone: int, i_count: int, st_states: dict) -> int:
     :return: stone_count: The total count of stones this stone gets transformed into
     """
     stone_count = 1
+
     # If we've reached the end, I am one stone. Return 1
     if i_count == iterations:
         st_states[stone, i_count] = stone_count
         return 1
-    # If we've seen this state before, return that count instead
+    # If we've seen this state before, return the saved count instead
     if (stone, i_count) in st_states:
         return st_states[(stone, i_count)]
 

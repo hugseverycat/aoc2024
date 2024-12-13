@@ -88,7 +88,7 @@ def count_corners(this_region: set) -> int:
     # VA   # if (x, y-1) and (x-1, y) are the same and (x-1, y-1) is different from A,
     # AA<  # then A (with a caret pointed to it) is an inside corner
 
-    # Then check each rotation. A single coordinate can be a corner 1, 2, or 4 times so we must check all ways.
+    # Then check each rotation. A single coordinate can be a corner up to 4 times so we must check all ways.
 
     outside_check = [
         # different, different

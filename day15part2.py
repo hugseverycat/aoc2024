@@ -67,24 +67,13 @@ for move in moves:
     while to_check:
         cx, cy = to_check.pop()  # My actual location
         mx, my = cx + dx, cy + dy  # The location I want to move to
-        if move == '<':
-            if warehouse_map[(mx, my)] == ']':
-                # We are moving left and we found the right side of the box. Add it and the left side to the movers
-                # dictionary and then add the left side of the box to the queue to make sure it has room to move
+        if move in '<>':
+            if warehouse_map[(mx, my)] in '[]':
+                # We are moving horizontally and we found the side of the box. Add it and the other side to the movers
+                # dictionary and then add the far side of the box to the queue to make sure it has room to move
                 movers[(mx, my)] = warehouse_map[(mx, my)]
-                movers[(mx - 1, my)] = warehouse_map[(mx - 1, my)]
-                to_check.append((mx - 1, my))
-            elif warehouse_map[(mx, my)] == '#':
-                # We found a wall. No move is possible. Stop checking.
-                move_possible = False
-                break
-        elif move == '>':
-            if warehouse_map[(mx, my)] == '[':
-                # We are moving right and we found the left side of the box. Add it and the right side to the movers
-                # dictionary and then add the right side of the box to the queue to make sure it has room to move
-                movers[(mx, my)] = warehouse_map[(mx, my)]
-                movers[(mx + 1, my)] = warehouse_map[(mx + 1, my)]
-                to_check.append((mx + 1, my))
+                movers[(mx + dx, my)] = warehouse_map[(mx + dx, my)]
+                to_check.append((mx + dx, my))
             elif warehouse_map[(mx, my)] == '#':
                 # We found a wall. No move is possible. Stop checking.
                 move_possible = False
@@ -96,16 +85,16 @@ for move in moves:
                 movers[(mx, my)] = warehouse_map[(mx, my)]
                 movers[(mx + 1, my)] = warehouse_map[(mx + 1, my)]
                 to_check.extend([(mx, my), (mx + 1, my)])
-            elif warehouse_map[(mx, my)] == '#':
-                # We found a wall. No move is possible. Stop checking.
-                move_possible = False
-                break
             elif warehouse_map[(mx, my)] == ']':
                 # We are moving vertically and we found the right side of a box. Add it and the left side to the movers
                 # dictionary and then add both sides tot he queue to make sure it has room to move
                 movers[(mx, my)] = warehouse_map[(mx, my)]
                 movers[(mx - 1, my)] = warehouse_map[(mx - 1, my)]
                 to_check.extend([(mx, my), (mx - 1, my)])
+            elif warehouse_map[(mx, my)] == '#':
+                # We found a wall. No move is possible. Stop checking.
+                move_possible = False
+                break
 
     if move_possible:
         # Set all the original locations to '.' in the warehouse_map

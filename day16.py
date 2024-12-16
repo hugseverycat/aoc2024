@@ -42,7 +42,31 @@ def draw_path(maze_map: dict, maze_path: list):
     print()
 
 
+"""
+def dijkstra_search(graph: WeightedGraph, start: Location, goal: Location):
+    frontier = PriorityQueue()
+    frontier.put(start, 0)
+    came_from: dict[Location, Optional[Location]] = {}
+    cost_so_far: dict[Location, float] = {}
+    came_from[start] = None
+    cost_so_far[start] = 0
 
+    while not frontier.empty():
+        current: Location = frontier.get()
+
+        if current == goal:
+            break
+
+        for next in graph.neighbors(current):
+            new_cost = cost_so_far[current] + graph.cost(current, next)
+            if next not in cost_so_far or new_cost < cost_so_far[next]:
+                cost_so_far[next] = new_cost
+                priority = new_cost
+                frontier.put(next, priority)
+                came_from[next] = current
+
+    return came_from, cost_so_far
+"""
 
 
 
@@ -100,3 +124,9 @@ while next_coord != start:
 
 draw_path(maze, path)
 print(final_score)
+
+new_queue = deque([(goal, current_d)])
+print(len(new_queue))
+print(new_queue)
+while new_queue:
+    (cx, cy), cd = new_queue.popleft()

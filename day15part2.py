@@ -87,7 +87,7 @@ for move in moves:
                 to_check.extend([(mx, my), (mx + 1, my)])
             elif warehouse_map[(mx, my)] == ']':
                 # We are moving vertically and we found the right side of a box. Add it and the left side to the movers
-                # dictionary and then add both sides tot he queue to make sure it has room to move
+                # dictionary and then add both sides to the queue to make sure it has room to move
                 movers[(mx, my)] = warehouse_map[(mx, my)]
                 movers[(mx - 1, my)] = warehouse_map[(mx - 1, my)]
                 to_check.extend([(mx, my), (mx - 1, my)])

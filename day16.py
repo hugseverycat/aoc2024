@@ -1,17 +1,14 @@
 from collections import deque
 import heapq
 
-with open('input/16.txt') as f:
-    lines = [line.rstrip() for line in f]
+with open('input/16.txt') as path_score:
+    lines = [line.rstrip() for line in path_score]
 
 x_bound = len(lines[0])
 y_bound = len(lines)
 maze = dict()
-states = dict()
-d = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-direction = 0
 solution_paths = []
-final_score = 0
+
 for y, this_line in enumerate(lines):
     for x, this_char in enumerate(this_line):
         if this_char == 'S':
@@ -22,6 +19,7 @@ for y, this_line in enumerate(lines):
             maze[(x, y)] = '.'
         else:
             maze[(x, y)] = this_char
+
 
 def draw_path(maze_map: dict, maze_path: list):
     print()
@@ -42,58 +40,55 @@ def draw_path(maze_map: dict, maze_path: list):
     print()
 
 
-
-score = 0
-queue = [(score, start, direction)]
-heapq.heapify(queue)
-visited_from = dict()
-visited_from[(start, direction)] = None
-scores = dict()
-scores[(start, direction)] = 0
-#print(f"Starting from {start}")
-final_score = 0
-while queue:
-    current_score, (cx, cy), current_d = heapq.heappop(queue)
-    #print()
-    #print(f"  Visiting {(cx, cy)} in direction {current_d}")
-    if (cx, cy) == goal:
-        final_score = current_score
-        break
-    for nd, (dx, dy) in enumerate(d):
-        #print(f"    Looking in direction {current_d}: {dx, dy}")
-        nx, ny = cx + dx, cy + dy
-        if maze[(nx, ny)] != '#':
-            #print(f"    Considering {(nx, ny)} in direction {nd}")
-            if nd == current_d:  # If we're going in the same direction we're facing
-                new_score = current_score + 1
-            elif nd == (current_d + 1) % 4:  # We are turning clockwise
-                new_score = current_score + 1001
-            elif nd == (current_d - 1) % 4:  # We are turning counter-clockwise
-                new_score = current_score + 1001
-            else:  # We are turning around
-                new_score = current_score + 2001
-            if ((nx, ny), nd) not in visited_from or new_score < scores[((nx, ny), nd)]:
-                try:
-                    if new_score < scores[((nx, ny), nd)]:
-                        #print(f"    We've been here before, but old score {scores[((nx, ny), nd)]} > new score {new_score}")
+def find_path(maze_map: dict, s: tuple, g: tuple):
+    d = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+    direction = 0
+    score = 0
+    queue = [(score, s, direction)]
+    heapq.heapify(queue)
+    visited_from = dict()
+    visited_from[(s, direction)] = None
+    scores = dict()
+    scores[(s, direction)] = 0
+    final_score = 0
+    while queue:
+        current_score, (cx, cy), current_d = heapq.heappop(queue)
+        if (cx, cy) == g:
+            final_score = current_score
+            break
+        for nd, (dx, dy) in enumerate(d):
+            nx, ny = cx + dx, cy + dy
+            if maze_map[(nx, ny)] != '#':
+                if nd == current_d:  # If we're going in the same direction we're facing
+                    new_score = current_score + 1
+                elif nd == (current_d + 1) % 4:  # We are turning clockwise
+                    new_score = current_score + 1001
+                elif nd == (current_d - 1) % 4:  # We are turning counter-clockwise
+                    new_score = current_score + 1001
+                else:  # We are turning around
+                    new_score = current_score + 2001
+                if ((nx, ny), nd) not in visited_from or new_score < scores[((nx, ny), nd)]:
+                    try:
+                        if new_score < scores[((nx, ny), nd)]:
+                            pass
+                    except KeyError:
                         pass
-                except KeyError:
-                    pass
-                #print(f"    Adding {(nx, ny)} in direction {nd} to the queue with score {new_score}")
-                visited_from[((nx, ny), nd)] = ((cx, cy), current_d)  # Should this be di or current_direction
-                scores[((nx, ny), nd)] = new_score
-                heapq.heappush(queue, (new_score, (nx, ny), nd))
-        else:
-            #print(f"    {(nx, ny)} is a wall")
-            pass
+                    visited_from[((nx, ny), nd)] = ((cx, cy), current_d)
+                    scores[((nx, ny), nd)] = new_score
+                    heapq.heappush(queue, (new_score, (nx, ny), nd))
+            else:
+                pass
 
-# Wrong answers
-# 107508 too high
-next_coord, next_dir = visited_from[(goal, current_d)]
-path = [next_coord]
-while next_coord != start:
-    next_coord, next_dir = visited_from[(next_coord, next_dir)]
-    path.append(next_coord)
+    next_coord, next_dir = visited_from[(goal, current_d)]
+    path = [next_coord]
+    while next_coord != start:
+        try:
+            next_coord, next_dir = visited_from[(next_coord, next_dir)]
+        except TypeError:
+            return [[], 10000000000]
+        path.append(next_coord)
+    return [path, final_score]
 
-#draw_path(maze, path)
-print(f"Part 1: {final_score}")
+
+optimal_path, path_score = find_path(maze, start, goal)
+print(f"Part 1: {path_score}")

@@ -46,10 +46,8 @@ def find_path(maze_map: dict, s: tuple, g: tuple):
     score = 0
     queue = [(score, s, direction)]
     heapq.heapify(queue)
-    visited_from = dict()
-    visited_from[(s, direction)] = None
-    scores = dict()
-    scores[(s, direction)] = 0
+    visited_from = {(s, direction): None}
+    scores = {(s, direction): 0}
     final_score = 0
     while queue:
         current_score, (cx, cy), current_d = heapq.heappop(queue)
@@ -82,10 +80,7 @@ def find_path(maze_map: dict, s: tuple, g: tuple):
     next_coord, next_dir = visited_from[(goal, current_d)]
     path = [next_coord]
     while next_coord != start:
-        try:
-            next_coord, next_dir = visited_from[(next_coord, next_dir)]
-        except TypeError:
-            return [[], 10000000000]
+        next_coord, next_dir = visited_from[(next_coord, next_dir)]
         path.append(next_coord)
     return [path, final_score]
 

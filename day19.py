@@ -1,4 +1,3 @@
-import re
 with open('input/19.txt') as f:
     lines = [line.rstrip() for line in f]
 
@@ -33,7 +32,7 @@ def find_pattern(pattern_to_find: str) -> int:
     matches = 0
     for towel in towels:
         # Check each towel to see if it is at the beginning of the pattern we're looking for
-        if re.search('^' + towel, pattern_to_find):
+        if pattern_to_find.startswith(towel):
             # If so, we will send the rest of the pattern back into the recursive function
             new_pattern = pattern_to_find[len(towel):]
             matches += find_pattern(new_pattern)

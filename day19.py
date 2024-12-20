@@ -1,10 +1,10 @@
 import re
-
 with open('input/19.txt') as f:
     lines = [line.rstrip() for line in f]
 
 towels = []
 patterns = []
+pattern_cache = dict()
 switch = False
 for this_line in lines:
     if switch:
@@ -14,38 +14,42 @@ for this_line in lines:
     else:
         towels = this_line.split(', ')
 
-def find_pattern(p_to_find, p_so_far=''):
-    if p_to_find == p_so_far:
-        return True
-    found = False
-    for this_towel in towels:
-        if found:
-            return True
-        new_partial_pattern = p_so_far + this_towel
-        if re.search('^' + new_partial_pattern, p_to_find):
-            found = find_pattern(p_to_find, new_partial_pattern)
-    return False
 
-def find_pattern_part2(p_to_find, p_so_far=''):
-    if p_to_find == p_so_far:
+def find_pattern(pattern_to_find: str) -> int:
+    """
+    A recursive function that finds how many ways there are to create the pattern provided. If the towel's pattern
+    matches the start of the pattern we're analyzing, those characters are removed and the remaining pattern is passed
+    back into the function.
+    :param pattern_to_find: The pattern we are analyzing
+    :return: An integer count of the number of ways that pattern can be created with the available towels.
+    """
+    if pattern_to_find == '':
+        # If the pattern is empty, then we have successfully created this pattern. Return 1.
         return 1
-    found_counter = 0
-    for this_towel in towels:
-        new_partial_pattern = p_so_far + this_towel
-        if re.search('^' + new_partial_pattern, p_to_find):
-            found_counter += find_pattern_part2(p_to_find, new_partial_pattern)
-    return found_counter
+    if pattern_to_find in pattern_cache:
+        # Check the cache to see if we've already analyzed this pattern.
+        return pattern_cache[pattern_to_find]
+    # This is a new pattern, so we'll start counting matches
+    matches = 0
+    for towel in towels:
+        # Check each towel to see if it is at the beginning of the pattern we're looking for
+        if re.search('^' + towel, pattern_to_find):
+            # If so, we will send the rest of the pattern back into the recursive function
+            new_pattern = pattern_to_find[len(towel):]
+            matches += find_pattern(new_pattern)
+    # Save the result in the cache and then return the result.
+    pattern_cache[pattern_to_find] = matches
+    return matches
 
-part1 = False
-if part1:
-    counter = 0
-    for this_pattern in patterns:
-        if find_pattern(this_pattern):
-            counter += 1
 
-else:
-    counter = 0
-    for this_pattern in patterns:
-        counter += find_pattern_part2(this_pattern)
+counter_p1 = 0
+counter_p2 = 0
+for this_pattern in patterns:
+    temp_counter = find_pattern(this_pattern)
+    if temp_counter:
+        # If no matches were found, don't count it for part 1
+        counter_p1 += 1
+        counter_p2 += temp_counter
 
-print(counter)
+print(f"Part 1: {counter_p1}")
+print(f"Part 2: {counter_p2}")

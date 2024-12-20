@@ -1,4 +1,5 @@
 import networkx as nx
+from itertools import islice
 
 with open('input/16.txt') as f:
     lines = [line.rstrip() for line in f]
@@ -15,6 +16,20 @@ for y, this_line in enumerate(lines):
             end = (x, y)
         maze_map[(x, y)] = this_char
 
+# Experiment with building graph differently
+queue = [start]
+while queue:
+    this_location = queue.pop()
+    if this_location == end:
+        # Do something
+        pass
+    cx, cy, cd = this_location
+    for next_d in range(4):
+        dx, dy = directions[next_d]
+        if maze_map[(cx + dx, cy + dy)] != '#':
+            pass  # I stopped working here.
+
+# Normal code continues
 for this_location in maze_map:
     if maze_map[this_location] != '#':
         cx, cy = this_location
@@ -36,4 +51,10 @@ for this_location in maze_map:
                         G.add_weighted_edges_from([((cx, cy, facing_d), next_node, 2001)])
 
 shortest = nx.dijkstra_path_length(G, start, end)
-print(shortest)
+path = nx.dijkstra_path(G, start, end)
+print(f"Part 1: {shortest}")
+print(f"Steps: {len(path)}")
+print(nx.path_weight(G, path, 'weight'))
+
+for n in G.neighbors((end)):
+    print(n)

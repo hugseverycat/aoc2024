@@ -33,7 +33,6 @@ while (cx, cy) != goal:
             cx += dx
             cy += dy
             break
-
 # Note, len(path) overcounts by 1
 cheat_dirs = [(0, -2), (1, -1), (2, 0), (1, 1), (0, 2), (-1, 1), (-2, 0), (-1, -1)]
 good_cheats = 0
@@ -46,4 +45,4 @@ for px, py in path:
             if gain >= 100:
                 good_cheats += 1
 
-print(good_cheats)
+print(f"Part 1: {good_cheats}")

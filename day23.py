@@ -20,8 +20,5 @@ for this_triad in triad_cliques:
 print(f"Part 1: {triads_with_t}")
 
 largest_cluster = all_cliques[-1]
-lan_password = ''
-for computer_name in sorted(largest_cluster):
-    lan_password += computer_name + ','
-lan_password = lan_password[:-1]
+lan_password = ','.join(sorted(largest_cluster))
 print(f"Part 2: {lan_password}")
